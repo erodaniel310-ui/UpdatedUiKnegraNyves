@@ -4,11 +4,12 @@ module.exports = {
   ],
   theme: {
     extend: {
-  fontFamily: {
+      fontFamily: {
         sans: ['Helvetica', 'Arial', 'sans-serif'],
       },
-},
+    },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar-hide'),
+  ],
 };
-
