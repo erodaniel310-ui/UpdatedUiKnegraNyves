@@ -35,34 +35,7 @@ export default function Footer() {
 
         {/* Newsletter */}
 
-        <div className="bg-[#1a1a1a] rounded-3xl p-10 mb-20 text-center">
-
-          <h2 className="text-4xl font-bold text-white">
-            Join Our Newsletter
-          </h2>
-
-          <p className="text-gray-400 mt-4 max-w-xl mx-auto">
-            Be the first to receive exclusive offers, new arrivals and fashion updates.
-          </p>
-
-          <div className="flex flex-col md:flex-row gap-4 justify-center mt-8">
-
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e)=>setEmail(e.target.value)}
-              className="md:w-[400px] h-14 rounded-full px-6 bg-white text-black outline-none"
-            />
-
-            <button className="bg-yellow-500 text-black font-semibold px-8 rounded-full hover:bg-yellow-400 transition">
-              Subscribe
-            </button>
-
-          </div>
-
-        </div>
-
+      
         <div className="grid lg:grid-cols-5 md:grid-cols-2 gap-12">
 
           {/* Brand */}
@@ -222,7 +195,7 @@ export default function Footer() {
 
       {/* Bottom */}
       
-      <div className="border-t border-white/10">
+      <div>
 
         <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center gap-6">
 
