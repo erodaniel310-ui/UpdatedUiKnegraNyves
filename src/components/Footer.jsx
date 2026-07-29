@@ -160,12 +160,6 @@ export default function Footer() {
 
               <li><Link to="/wishlist" className="hover:text-yellow-500">Wishlist</Link></li>
 
-              <li><Link to="/shipping" className="hover:text-yellow-500">Shipping</Link></li>
-
-              <li><Link to="/returns" className="hover:text-yellow-500">Returns</Link></li>
-
-              <li><Link to="/faq" className="hover:text-yellow-500">FAQs</Link></li>
-
             </ul>
 
           </div>
@@ -179,11 +173,8 @@ export default function Footer() {
             </h3>
 
             <div className="space-y-6">
-
               <div className="flex gap-4">
-
                 <MapPin className="text-yellow-500 mt-1"/>
-
                 <a
                   href="https://maps.google.com/?q=Victoria+Island+Lagos"
                   target="_blank"
@@ -227,70 +218,10 @@ export default function Footer() {
 
         </div>
 
-        {/* Trust */}
-
-        <div className="grid md:grid-cols-3 gap-6 mt-20">
-
-          <div className="flex items-center gap-3">
-
-            <ShieldCheck className="text-yellow-500"/>
-
-            <div>
-
-              <h4 className="text-white font-semibold">
-                Secure Payments
-              </h4>
-
-              <p className="text-gray-400 text-sm">
-                SSL encrypted checkout
-              </p>
-
-            </div>
-
-          </div>
-
-          <div className="flex items-center gap-3">
-
-            <Truck className="text-yellow-500"/>
-
-            <div>
-
-              <h4 className="text-white font-semibold">
-                Free Delivery
-              </h4>
-
-              <p className="text-gray-400 text-sm">
-                On selected orders
-              </p>
-
-            </div>
-
-          </div>
-
-          <div className="flex items-center gap-3">
-
-            <RotateCcw className="text-yellow-500"/>
-
-            <div>
-
-              <h4 className="text-white font-semibold">
-                Easy Returns
-              </h4>
-
-              <p className="text-gray-400 text-sm">
-                7-Day return policy
-              </p>
-
-            </div>
-
-          </div>
-
-        </div>
-
       </div>
 
       {/* Bottom */}
-
+      
       <div className="border-t border-white/10">
 
         <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center gap-6">
@@ -305,11 +236,8 @@ export default function Footer() {
             <span className="text-sm">Visa</span>
             <span className="text-sm">Mastercard</span>
             <span className="text-sm">Paystack</span>
-
           </div>
-
         </div>
-
       </div>
 
       <motion.button
