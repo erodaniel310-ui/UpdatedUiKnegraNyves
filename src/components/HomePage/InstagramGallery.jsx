@@ -100,12 +100,13 @@ export default function InstagramGallery() {
           viewport={{ once: true }}
           className="text-center mt-16"
         >
-          <a
-            href="#"
-            className="inline-block bg-black text-white px-8 py-4 rounded-full font-semibold hover:bg-yellow-600 transition"
-          >
+        <button
+  href="https://instagram.com/knegranyves"
+  target="_blank"
+  rel="noopener noreferrer"
+>
             Follow on Instagram
-          </a>
+          </button>
         </motion.div>
 
       </div>

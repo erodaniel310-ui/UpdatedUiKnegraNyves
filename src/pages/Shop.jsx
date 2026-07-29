@@ -11,7 +11,7 @@ import ShopToolbar from "../components/Shop/ShopToolbar";
 import { useLocation } from "react-router-dom";
 
 export default function Shop({ category = null }) {
-  const location = useLocation();
+ 
   const [selectedPrice, setSelectedPrice] = useState("all");
   const [search, setSearch] = useState("");
  const [sortBy, setSortBy] = useState("featured");

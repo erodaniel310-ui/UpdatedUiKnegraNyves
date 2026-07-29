@@ -27,7 +27,11 @@ export default function ProtectedRoute({ children, redirectTo = "/login" }) {
   if (!user) {
     return <Navigate to={redirectTo} replace />;
   }
-
+// Not logged in
+if (!user) {
+  console.log("Redirecting to:", redirectTo);
+  return <Navigate to={redirectTo} replace />;
+}
   // Logged in
   return children;
 }

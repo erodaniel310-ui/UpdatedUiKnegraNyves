@@ -8,9 +8,6 @@ import {
   Phone,
   Mail,
   ArrowUp,
-  ShieldCheck,
-  Truck,
-  RotateCcw,
   CreditCard,
 } from "lucide-react";
 
@@ -18,7 +15,6 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 export default function Footer() {
-  const [email, setEmail] = useState("");
 
   const scrollToTop = () =>
     window.scrollTo({

@@ -471,7 +471,7 @@ useEffect(() => {
           panel with a wordmark or tagline).
         ------------------------------------------------------------ */}
         <div className="border-t border-gray-100 px-8 py-6 text-center">
-      <img src={Logo} className="h-8 mx-auto" />
+      <img src={Logo} alt="Knegra Nyves Logo" className="h-8 mx-auto" />
         </div>
 
       </motion.div>

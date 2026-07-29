@@ -23,10 +23,7 @@ export default function DashboardCards({
     (order) => order.status === "Pending"
   ).length;
 
-  const deliveredOrders = orders.filter(
-    (order) => order.status === "Delivered"
-  ).length;
-
+ 
   const cards = [
     {
       title: "Products",

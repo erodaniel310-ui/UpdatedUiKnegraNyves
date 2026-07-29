@@ -21,8 +21,7 @@ import {
   ChevronRight,
   X,
   AlertTriangle,
-  Sparkles,
-  Clock,
+  
 } from "lucide-react";
 
 // ------------------------------------------------------------------
@@ -43,29 +42,6 @@ const item = {
 };
 
 
-function ProductCard({ product }) {
-  return (
-    <motion.div
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.25, ease: "easeOut" }}
-      className="w-44 shrink-0 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm sm:w-52"
-    >
-      <div className="aspect-[5/6] overflow-hidden bg-gray-50">
-        <img
-          src={product.image}
-          alt={product.name}
-          className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
-        />
-      </div>
-      <div className="p-4">
-        <p className="truncate text-sm font-semibold text-gray-900">{product.name}</p>
-        <p className="mt-1 text-sm font-medium text-[#B8952E]">
-          ₦{product.price.toLocaleString()}
-        </p>
-      </div>
-    </motion.div>
-  );
-}
 
 export default function Account() {
   const navigate = useNavigate();
