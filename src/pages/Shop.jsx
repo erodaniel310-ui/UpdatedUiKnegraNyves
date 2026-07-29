@@ -8,7 +8,7 @@ import ProductCard from "../components/Shop/ProductCard";
 import { useEffect, useState } from "react";
 import { getProducts } from "../services/productService";
 import ShopToolbar from "../components/Shop/ShopToolbar";
-import { useLocation } from "react-router-dom";
+
 
 export default function Shop({ category = null }) {
  
