@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Navigate, Link, useParams } from "react-router-dom";
-import { ChevronRight } from "lucide-react";
 
 import ProductGallery from "../components/Product/ProductGallery";
 import ProductInfo from "../components/Product/ProductInfo";

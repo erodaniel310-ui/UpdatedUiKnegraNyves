@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import MobileFilters from "../components/Shop/MobileFilters";
 import FilterSidebar from "../components/Shop/FilterSidebar";
