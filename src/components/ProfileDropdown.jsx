@@ -39,14 +39,14 @@ export default function ProfileDropdown({
             </p>
           </div>
 
-          <Link
-            to="/profile"
-            onClick={close}
-            className="flex items-center gap-3 px-5 py-4 hover:bg-gray-100 transition"
-          >
-            <User size={18} />
-            My Profile
-          </Link>
+    <Link
+  to="/account"
+  onClick={close}
+  className="flex items-center gap-3 px-5 py-4 hover:bg-gray-100 transition"
+>
+  <User size={18} />
+  My Profile
+</Link>
 
           <Link
             to="/orders"

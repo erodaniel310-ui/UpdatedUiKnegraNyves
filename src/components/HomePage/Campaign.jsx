@@ -7,7 +7,7 @@ import campaign from "../../images/sideImagefour.jpg";
 
 export default function Campaign() {
   return (
-    <section className="bg-[#f8f8f8] py-28 overflow-hidden">
+    <section className="bg-[#f6f2ea] py-28 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
 
@@ -20,11 +20,11 @@ export default function Campaign() {
             transition={{ duration: .8 }}
           >
 
-            <span className="uppercase tracking-[8px] text-sm text-yellow-600">
+            <span className="uppercase tracking-[.3em] text-[11px] text-[#a8793f]">
               Autumn / Winter 2026
             </span>
 
-            <h2 className="text-5xl lg:text-7xl font-black leading-tight mt-8">
+            <h2 className="font-['Bodoni_Moda'] italic font-normal text-5xl lg:text-6xl leading-[1.15] mt-8 text-[#1c1712]">
               Crafted
               <br />
               For The
@@ -34,7 +34,7 @@ export default function Campaign() {
               Lifestyle.
             </h2>
 
-            <p className="mt-8 text-gray-600 leading-8 max-w-lg">
+            <p className="mt-8 text-[#7a7062] leading-8 max-w-lg text-[15px]">
               Discover timeless silhouettes,
               premium fabrics and effortless
               luxury designed for every season.
@@ -47,18 +47,18 @@ export default function Campaign() {
 
               <Link
                 to="/shop"
-                className="bg-black text-white px-8 py-4 rounded-full flex items-center gap-3 hover:bg-yellow-600 transition"
+                className="bg-[#1c1712] text-[#ede7db] px-8 py-4 flex items-center gap-3 border border-[#1c1712] hover:bg-transparent hover:text-[#1c1712] transition text-[12px] tracking-[0.1em]"
               >
-                Shop Collection
+                SHOP COLLECTION
 
-                <ArrowRight size={18} />
+                <ArrowRight size={16} />
               </Link>
 
               <Link
                 to="/about"
-                className="border border-black px-8 py-4 rounded-full hover:bg-black hover:text-white transition"
+                className="border border-[#1c1712] px-8 py-4 hover:bg-[#1c1712] hover:text-[#ede7db] transition text-[12px] tracking-[0.1em] text-[#1c1712]"
               >
-                Our Story
+                OUR STORY
               </Link>
 
             </div>
@@ -81,7 +81,7 @@ export default function Campaign() {
               whileHover={{ scale: 1.03 }}
               src={campaign}
               alt=""
-              className="absolute right-0 top-0 w-[75%] h-[600px] object-cover rounded-3xl shadow-2xl"
+              className="absolute right-0 top-0 w-[75%] h-[600px] object-cover border border-[#a8793f]"
             />
 
             {/* Floating Image */}
@@ -93,7 +93,7 @@ export default function Campaign() {
               }}
               src={campaign2}
               alt=""
-              className="absolute bottom-0 left-0 w-[45%] h-[320px] object-cover rounded-3xl border-[12px] border-white shadow-xl"
+              className="absolute bottom-0 left-0 w-[45%] h-[320px] object-cover border-[10px] border-[#f6f2ea] outline outline-1 outline-[#a8793f]"
             />
 
             {/* Floating Card */}
@@ -106,14 +106,14 @@ export default function Campaign() {
                 repeat: Infinity,
                 duration: 4,
               }}
-              className="absolute top-10 left-10 bg-white rounded-2xl shadow-xl p-6"
+              className="absolute top-10 left-10 bg-[#1c1712] border border-[#a8793f] p-7"
             >
 
-              <h3 className="font-black text-4xl">
+              <h3 className="font-['Bodoni_Moda'] italic text-[#ede7db] text-4xl font-normal">
                 30%
               </h3>
 
-              <p className="text-gray-500">
+              <p className="text-[#c9a876] text-[10px] tracking-[0.15em] mt-1">
                 OFF NEW COLLECTION
               </p>
 

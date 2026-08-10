@@ -5,7 +5,7 @@ import heroImage from "../../images/homeimage.jpg";
 
 export default function Hero() {
   return (
-    <section className="relative h-screen overflow-hidden bg-black">
+    <section className="relative h-screen overflow-hidden bg-[#1c1712]">
       <div className="absolute inset-0 h-full">
         {/* Background Image */}
         <img
@@ -15,25 +15,26 @@ export default function Hero() {
         />
 
         {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-black/45"></div>
+        <div className="absolute inset-0 bg-[#1c1712]/45"></div>
 
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/20 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#1c1712]/80 via-[#1c1712]/30 to-transparent"></div>
       </div>
 
       {/* Hero Content */}
       <div className="relative z-20 mx-auto flex h-full w-full max-w-7xl items-center px-6 py-24 sm:px-8 lg:px-10">
         <div className="max-w-2xl">
+
           {/* Heading */}
           <motion.h1
             initial={{ opacity: 0, y: 35 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
-            className="text-white font-black leading-none text-5xl md:text-7xl xl:text-8xl"
+            className="font-['Bodoni_Moda'] italic font-normal leading-[1.08] text-5xl md:text-7xl xl:text-8xl text-[#ede7db]"
           >
-            WEAR
+            Wear it with
             <br />
-            CONFIDENCE
+            confidence
           </motion.h1>
 
           {/* Description */}
@@ -41,7 +42,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 35 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="text-gray-200 text-lg md:text-xl mt-8 leading-8 max-w-xl"
+            className="text-[#c9beac] text-lg md:text-xl mt-8 leading-8 max-w-xl"
           >
             Discover premium fashion crafted for every occasion. Elevate your
             wardrobe with timeless pieces that combine luxury, comfort, and
@@ -57,21 +58,20 @@ export default function Hero() {
           >
             <Link
               to="/shop"
-              className="group bg-white text-black px-8 py-4 rounded-full font-semibold flex items-center gap-3 hover:bg-yellow-400 transition-all duration-300"
+              className="group bg-[#ede7db] text-[#1c1712] px-8 py-4 text-[12px] tracking-[0.1em] font-medium flex items-center gap-3 border border-[#ede7db] hover:bg-transparent hover:text-[#ede7db] transition-all duration-300"
             >
-              Shop Collection
-
+              SHOP COLLECTION
               <ArrowRight
-                size={18}
+                size={16}
                 className="group-hover:translate-x-1 transition"
               />
             </Link>
 
             <Link
               to="/new-arrivals"
-              className="border border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-black transition-all duration-300"
+              className="border border-[#a8793f] text-[#ede7db] px-8 py-4 text-[12px] tracking-[0.1em] font-medium hover:bg-[#a8793f]/10 transition-all duration-300"
             >
-              New Arrivals
+              NEW ARRIVALS
             </Link>
           </motion.div>
         </div>

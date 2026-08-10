@@ -31,7 +31,7 @@ const categories = [
 
 export default function Categories() {
   return (
-    <section className="py-28 bg-white">
+    <section className="py-28 bg-[#f6f2ea]">
 
       <div className="max-w-7xl mx-auto px-6">
 
@@ -44,15 +44,15 @@ export default function Categories() {
           viewport={{ once: true }}
           className="text-center mb-20"
         >
-          <p className="uppercase tracking-[8px] text-yellow-600 text-sm">
+          <p className="uppercase tracking-[.3em] text-[#a8793f] text-[11px]">
             Shop By Category
           </p>
 
-          <h2 className="text-5xl font-black mt-4">
+          <h2 className="font-['Bodoni_Moda'] italic font-normal text-5xl mt-4 text-[#1c1712]">
             Discover Your Style
           </h2>
 
-          <p className="text-gray-500 mt-6 max-w-xl mx-auto leading-8">
+          <p className="text-[#7a7062] mt-6 max-w-xl mx-auto leading-8 text-[15px]">
             Carefully curated collections designed to bring luxury,
             confidence and effortless style into your everyday wardrobe.
           </p>
@@ -60,7 +60,7 @@ export default function Categories() {
 
         {/* Cards */}
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-3 gap-5">
 
           {categories.map((item, index) => (
 
@@ -76,7 +76,7 @@ export default function Categories() {
             >
               <Link
                 to={item.link}
-                className="group block relative overflow-hidden rounded-3xl h-[650px]"
+                className="group block relative overflow-hidden h-[460px]"
               >
 
                 {/* Image */}
@@ -84,35 +84,41 @@ export default function Categories() {
                 <img
                   src={item.image}
                   alt={item.title}
-                  className="absolute inset-0 w-full h-full object-cover transition duration-700 group-hover:scale-110"
+                  className="absolute inset-0 w-full h-full object-cover transition duration-700 group-hover:scale-105"
                 />
 
                 {/* Overlay */}
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1c1712] via-[#1c1712]/20 to-transparent" />
+
+                {/* Look number */}
+
+                <span className="font-['Bodoni_Moda'] italic absolute top-4 left-4 text-xs text-[#ede7db]">
+                  {`No. ${String(index + 1).padStart(2, "0")}`}
+                </span>
 
                 {/* Content */}
 
-                <div className="absolute bottom-0 left-0 right-0 p-10">
+                <div className="absolute bottom-0 left-0 right-0 p-7">
 
                   <motion.h3
                     whileHover={{ x: 5 }}
-                    className="text-white text-4xl font-bold"
+                    className="font-['Bodoni_Moda'] italic text-white text-[28px] font-normal"
                   >
                     {item.title}
                   </motion.h3>
 
-                  <p className="text-gray-300 mt-3">
+                  <p className="text-[#c9beac] mt-1.5 text-xs tracking-wide">
                     {item.subtitle}
                   </p>
 
-                  <div className="mt-8 flex items-center gap-3 text-white font-semibold">
+                  <div className="mt-5 flex items-center gap-2 text-white text-[11px] tracking-[0.15em]">
 
-                    Shop Now
+                    SHOP NOW
 
                     <ArrowRight
                       className="group-hover:translate-x-2 transition"
-                      size={20}
+                      size={14}
                     />
 
                   </div>

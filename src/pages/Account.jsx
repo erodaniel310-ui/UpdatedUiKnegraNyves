@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { auth } from "../firebase/firebase";
 import { logout } from "../services/authService";
+import { getUserOrders } from "../services/orderService";
 import { useNavigate, Link } from "react-router-dom";
+import { useWishlist } from "../context/WishlistContext";
 import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -21,32 +23,49 @@ import {
   ChevronRight,
   X,
   AlertTriangle,
-  
 } from "lucide-react";
 
-// ------------------------------------------------------------------
-// Animation variants — reused across sections for a consistent,
-// Apple-style staggered fade/rise-in feel.
-// ------------------------------------------------------------------
+// -------------------------------------------------------------
+// Animation variants
+// -------------------------------------------------------------
+
 const container = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
+    },
   },
 };
 
 const item = {
-  hidden: { opacity: 0, y: 18 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
+  hidden: {
+    opacity: 0,
+    y: 18,
+  },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.4,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
 };
-
-
 
 export default function Account() {
   const navigate = useNavigate();
 
+  const { wishlistItems } = useWishlist();
+
   const user = auth.currentUser;
+
+  const [orders, setOrders] = useState([]);
+  const [loadingStats, setLoadingStats] = useState(true);
+
+  const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
 
   const displayName =
     user?.displayName ||
@@ -62,39 +81,103 @@ export default function Account() {
         .toUpperCase()
     : user?.email?.charAt(0).toUpperCase();
 
-  // Real Firebase data — creationTime is provided by Firebase Auth's
-  // user metadata, so this is genuine, not fabricated.
   const memberSince = user?.metadata?.creationTime
-    ? new Date(user.metadata.creationTime).toLocaleDateString("en-US", {
-        month: "long",
-        year: "numeric",
-      })
+    ? new Date(user.metadata.creationTime).toLocaleDateString(
+        "en-US",
+        {
+          month: "long",
+          year: "numeric",
+        }
+      )
     : null;
 
-  const handleLogout = async () => {
-    await logout();
+  useEffect(() => {
+    async function loadOrders() {
+      if (!user) {
+        setLoadingStats(false);
+        return;
+      }
 
-    toast.success("Logged out successfully");
+      try {
+        setLoadingStats(true);
 
-    navigate("/");
-  };
+        const customerOrders = await getUserOrders(user.uid);
 
-  // Logout is now a confirmation-gated action. `handleLogout` itself
-  // is completely unchanged — only *when* it fires has changed.
-  const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
+        setOrders(customerOrders);
+      } catch (error) {
+        console.error(
+          "Failed to load customer orders:",
+          error
+        );
 
-  // --------------------------------------------------------------
-  // Quick Stats — no order/wishlist-count service exists in this
-  // component today, so real numbers aren't fabricated here. These
-  // render as "—" until wired to your actual data source (e.g. an
-  // orders service or Firestore aggregation query).
-  // --------------------------------------------------------------
+        toast.error(
+          "Unable to load your account statistics."
+        );
+      } finally {
+        setLoadingStats(false);
+      }
+    }
+
+    loadOrders();
+  }, [user]);
+
+  const totalOrders = orders.length;
+
+  const completedOrders = orders.filter(
+    (order) =>
+      order.status?.toLowerCase() === "delivered"
+  ).length;
+
+  const totalSpent = orders
+    .filter(
+      (order) =>
+        order.status?.toLowerCase() === "delivered"
+    )
+    .reduce(
+      (total, order) =>
+        total + Number(order.total || 0),
+      0
+    );
+
+  const formattedTotalSpent =
+    `₦${totalSpent.toLocaleString("en-NG")}`;
+
   const stats = [
-    { label: "Orders", value: "—", icon: ShoppingBag },
-    { label: "Wishlist", value: "—", icon: Heart },
-    { label: "Completed Orders", value: "—", icon: Package },
-    { label: "Total Spent", value: "—", icon: Wallet },
+    {
+      label: "Orders",
+      value: loadingStats ? "..." : totalOrders,
+      icon: ShoppingBag,
+    },
+    {
+      label: "Wishlist",
+      value: wishlistItems.length,
+      icon: Heart,
+    },
+    {
+      label: "Completed Orders",
+      value: loadingStats ? "..." : completedOrders,
+      icon: Package,
+    },
+    {
+      label: "Total Spent",
+      value: loadingStats ? "..." : formattedTotalSpent,
+      icon: Wallet,
+    },
   ];
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+
+      toast.success("Logged out successfully");
+
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+
+      toast.error("Logout failed.");
+    }
+  };
 
   const quickActions = [
     {
@@ -130,11 +213,12 @@ export default function Account() {
   ];
 
   return (
-    <main className="min-h-screen bg-[#fafafa]">
+    <main className="min-h-screen bg-[#f6f2ea]">
 
       <section className="mx-auto max-w-5xl px-5 py-10 sm:px-6 sm:py-14">
 
-        {/* Back Button — elegant circular icon button */}
+        {/* BACK BUTTON */}
+
         <motion.button
           initial={{ opacity: 0, x: -8 }}
           animate={{ opacity: 1, x: 0 }}
@@ -142,75 +226,81 @@ export default function Account() {
           whileHover={{ x: -2 }}
           onClick={() => navigate(-1)}
           aria-label="Go back"
-          className="mb-8 flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-600 shadow-sm transition-colors duration-200 hover:border-[#D4AF37] hover:text-[#B8952E]"
+          className="mb-8 flex h-11 w-11 items-center justify-center border border-[#1c1712] bg-transparent text-[#1c1712] transition-colors duration-200 hover:border-[#a8793f] hover:text-[#a8793f]"
         >
           <ArrowLeft size={18} strokeWidth={1.75} />
         </motion.button>
 
-        {/* Page heading */}
+        {/* PAGE HEADING */}
+
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.05 }}
           className="mb-10"
         >
-          <h1 className="font-serif text-4xl font-semibold tracking-wide text-black sm:text-5xl">
+          <h1 className="font-['Bodoni_Moda'] italic font-normal text-4xl text-[#1c1712] sm:text-5xl">
             My Account
           </h1>
-          <p className="mt-2 text-[15px] text-gray-500">
+
+          <p className="mt-2 text-[15px] text-[#7a7062]">
             Manage your profile, orders, and preferences.
           </p>
         </motion.div>
 
-        {/* ---------------------------------------------------------
-          PROFILE HEADER
-        --------------------------------------------------------- */}
+        {/* PROFILE HEADER */}
+
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          className="rounded-3xl border border-gray-100 bg-white p-7 shadow-sm sm:p-10"
+          className="border border-[#d8cfba] bg-white p-7 sm:p-10"
         >
           <div className="flex flex-col items-center gap-6 text-center sm:flex-row sm:text-left">
 
             {/* Avatar */}
-            <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#D4AF37] to-[#B8952E] text-3xl font-bold text-white shadow-lg ring-4 ring-[#D4AF37]/10">
+
+            <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-full bg-[#a8793f] text-3xl font-medium text-[#ede7db]">
               {initials}
             </div>
 
             <div className="flex-1">
-              <h2 className="font-serif text-2xl font-semibold text-black sm:text-3xl">
+
+              <h2 className="font-['Bodoni_Moda'] italic font-normal text-2xl text-[#1c1712] sm:text-3xl">
                 {displayName}
               </h2>
 
-              <p className="mt-2 flex items-center justify-center gap-2 text-sm text-gray-500 sm:justify-start">
+              <p className="mt-2 flex items-center justify-center gap-2 text-sm text-[#7a7062] sm:justify-start">
                 <Mail size={15} strokeWidth={1.75} />
+
                 {user?.email}
               </p>
 
-              <p className="mt-3 text-[15px] text-gray-500">
+              <p className="mt-3 text-[15px] text-[#7a7062]">
                 Welcome back,{" "}
-                <span className="font-semibold text-gray-900">{displayName}</span> 👋
+                <span className="font-medium text-[#1c1712]">
+                  {displayName}
+                </span>
               </p>
 
               <div className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 sm:justify-start">
 
                 {user?.emailVerified ? (
-                  <span className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-600">
+                  <span className="inline-flex items-center gap-1.5 text-[11px] tracking-[0.1em] font-medium text-emerald-700">
                     <BadgeCheck size={16} strokeWidth={2} />
-                    Verified Account
+                    VERIFIED ACCOUNT
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1.5 text-sm font-medium text-rose-500">
+                  <span className="inline-flex items-center gap-1.5 text-[11px] tracking-[0.1em] font-medium text-[#9c4a3c]">
                     <AlertTriangle size={15} strokeWidth={2} />
-                    Email not verified
+                    EMAIL NOT VERIFIED
                   </span>
                 )}
 
                 {memberSince && (
-                  <span className="inline-flex items-center gap-1.5 text-sm text-gray-400">
+                  <span className="inline-flex items-center gap-1.5 text-[11px] tracking-[0.1em] text-[#a39a8c]">
                     <Calendar size={15} strokeWidth={1.75} />
-                    Member since {memberSince}
+                    MEMBER SINCE {memberSince.toUpperCase()}
                   </span>
                 )}
 
@@ -219,34 +309,42 @@ export default function Account() {
           </div>
         </motion.div>
 
-        {/* ---------------------------------------------------------
-          QUICK STATS
-        --------------------------------------------------------- */}
+        {/* REAL QUICK STATS */}
+
         <motion.div
           variants={container}
           initial="hidden"
           animate="show"
-          className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4"
+          className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4"
         >
+
           {stats.map(({ label, value, icon: Icon }) => (
             <motion.div
               key={label}
               variants={item}
               whileHover={{ y: -3 }}
-              className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-shadow duration-200 hover:shadow-md"
+              className="border border-[#d8cfba] bg-white p-5"
             >
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#D4AF37]/10 text-[#B8952E]">
-                <Icon size={18} strokeWidth={1.75} />
+
+              <span className="flex h-9 w-9 items-center justify-center border border-[#a8793f] text-[#a8793f]">
+                <Icon size={17} strokeWidth={1.75} />
               </span>
-              <p className="mt-4 text-2xl font-bold text-black">{value}</p>
-              <p className="mt-0.5 text-sm text-gray-500">{label}</p>
+
+              <p className="mt-4 text-2xl font-semibold text-[#1c1712]">
+                {value}
+              </p>
+
+              <p className="mt-0.5 text-sm text-[#7a7062]">
+                {label}
+              </p>
+
             </motion.div>
           ))}
+
         </motion.div>
 
-        {/* ---------------------------------------------------------
-          QUICK ACTIONS
-        --------------------------------------------------------- */}
+        {/* QUICK ACTIONS */}
+
         <motion.div
           variants={container}
           initial="hidden"
@@ -254,57 +352,94 @@ export default function Account() {
           viewport={{ once: true, amount: 0.2 }}
           className="mt-10"
         >
-          <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.15em] text-gray-400">
-            Quick Actions
+
+          <h3 className="mb-4 text-[11px] font-medium tracking-[0.2em] text-[#a8793f]">
+            QUICK ACTIONS
           </h3>
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 
             {quickActions.map(({ title, subtitle, icon: Icon, to }) => (
-              <motion.div key={title} variants={item} whileHover={{ y: -3 }}>
+              <motion.div
+                key={title}
+                variants={item}
+                whileHover={{ y: -3 }}
+              >
+
                 <Link
                   to={to}
-                  className="group flex items-center justify-between rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-200 hover:border-[#D4AF37] hover:shadow-md"
+                  className="group flex items-center justify-between border border-[#d8cfba] bg-white p-6 transition-colors duration-200 hover:border-[#a8793f]"
                 >
+
                   <div className="flex items-center gap-4">
-                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#D4AF37]/10 text-[#B8952E] transition-colors duration-200 group-hover:bg-[#D4AF37] group-hover:text-white">
+
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center border border-[#a8793f] text-[#a8793f] transition-colors duration-200 group-hover:bg-[#a8793f] group-hover:text-[#ede7db]">
                       <Icon size={19} strokeWidth={1.75} />
                     </span>
+
                     <div>
-                      <h4 className="font-semibold text-gray-900">{title}</h4>
-                      <p className="mt-0.5 text-sm text-gray-500">{subtitle}</p>
+
+                      <h4 className="font-medium text-[#1c1712]">
+                        {title}
+                      </h4>
+
+                      <p className="mt-0.5 text-sm text-[#7a7062]">
+                        {subtitle}
+                      </p>
+
                     </div>
+
                   </div>
 
                   <ChevronRight
                     size={18}
-                    className="shrink-0 text-gray-300 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-[#B8952E]"
+                    className="shrink-0 text-[#a39a8c] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-[#a8793f]"
                   />
+
                 </Link>
+
               </motion.div>
             ))}
 
-            {/* Logout — luxury danger card, opens confirmation modal */}
-            <motion.div variants={item} whileHover={{ y: -3 }}>
+            {/* LOGOUT */}
+
+            <motion.div
+              variants={item}
+              whileHover={{ y: -3 }}
+            >
+
               <button
                 onClick={() => setLogoutConfirmOpen(true)}
-                className="group flex w-full items-center justify-between rounded-2xl border border-gray-100 bg-white p-6 text-left shadow-sm transition-all duration-200 hover:border-rose-400 hover:shadow-md"
+                className="group flex w-full items-center justify-between border border-[#d8cfba] bg-white p-6 text-left transition-colors duration-200 hover:border-[#9c4a3c]"
               >
+
                 <div className="flex items-center gap-4">
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-rose-50 text-rose-500 transition-colors duration-200 group-hover:bg-rose-500 group-hover:text-white">
+
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center border border-[#9c4a3c] text-[#9c4a3c] transition-colors duration-200 group-hover:bg-[#9c4a3c] group-hover:text-[#ede7db]">
                     <LogOut size={19} strokeWidth={1.75} />
                   </span>
+
                   <div>
-                    <h4 className="font-semibold text-gray-900">Logout</h4>
-                    <p className="mt-0.5 text-sm text-gray-500">Sign out of your account</p>
+
+                    <h4 className="font-medium text-[#1c1712]">
+                      Logout
+                    </h4>
+
+                    <p className="mt-0.5 text-sm text-[#7a7062]">
+                      Sign out of your account
+                    </p>
+
                   </div>
+
                 </div>
 
                 <ChevronRight
                   size={18}
-                  className="shrink-0 text-gray-300 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-rose-400"
+                  className="shrink-0 text-[#a39a8c] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-[#9c4a3c]"
                 />
+
               </button>
+
             </motion.div>
 
           </div>
@@ -312,19 +447,20 @@ export default function Account() {
 
       </section>
 
-      {/* -------------------------------------------------------------
-        LOGOUT CONFIRMATION MODAL
-      ------------------------------------------------------------- */}
+      {/* LOGOUT CONFIRMATION MODAL */}
+
       <AnimatePresence>
+
         {logoutConfirmOpen && (
           <>
+
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
               onClick={() => setLogoutConfirmOpen(false)}
-              className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm"
+              className="fixed inset-0 z-[100] bg-[#1c1712]/55 backdrop-blur-sm"
             />
 
             <motion.div
@@ -335,47 +471,57 @@ export default function Account() {
               role="dialog"
               aria-modal="true"
               aria-label="Confirm logout"
-              className="fixed left-1/2 top-1/2 z-[101] w-[90%] max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-7 shadow-2xl"
+              className="fixed left-1/2 top-1/2 z-[101] w-[90%] max-w-sm -translate-x-1/2 -translate-y-1/2 border border-[#a8793f] bg-[#f6f2ea] p-7"
             >
+
               <button
                 onClick={() => setLogoutConfirmOpen(false)}
                 aria-label="Close"
-                className="absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-full text-gray-400 transition-colors duration-200 hover:bg-gray-100 hover:text-black"
+                className="absolute right-5 top-5 flex h-8 w-8 items-center justify-center border border-transparent text-[#a39a8c] transition-colors duration-200 hover:border-[#1c1712] hover:text-[#1c1712]"
               >
                 <X size={16} />
               </button>
 
-              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-rose-50 text-rose-500">
+              <span className="flex h-12 w-12 items-center justify-center border border-[#9c4a3c] text-[#9c4a3c]">
                 <LogOut size={20} strokeWidth={1.75} />
               </span>
 
-              <h3 className="mt-5 text-xl font-semibold text-black">
+              <h3 className="mt-5 text-xl font-['Bodoni_Moda'] italic text-[#1c1712]">
                 Log out of your account?
               </h3>
-              <p className="mt-2 text-sm text-gray-500">
-                You'll need to sign in again to view your orders, wishlist, and saved details.
+
+              <p className="mt-2 text-sm text-[#7a7062]">
+                You'll need to sign in again to view
+                your orders, wishlist, and saved
+                details.
               </p>
 
               <div className="mt-7 flex gap-3">
+
                 <button
                   onClick={() => setLogoutConfirmOpen(false)}
-                  className="h-12 flex-1 rounded-full border border-gray-200 text-sm font-semibold text-gray-700 transition-colors duration-200 hover:border-[#D4AF37] hover:text-[#B8952E]"
+                  className="h-12 flex-1 border border-[#1c1712] text-sm font-medium text-[#1c1712] transition-colors duration-200 hover:border-[#a8793f] hover:text-[#a8793f]"
                 >
                   Cancel
                 </button>
+
                 <button
                   onClick={() => {
                     setLogoutConfirmOpen(false);
                     handleLogout();
                   }}
-                  className="h-12 flex-1 rounded-full bg-black text-sm font-semibold text-white transition-colors duration-200 hover:bg-rose-500"
+                  className="h-12 flex-1 bg-[#1c1712] text-sm font-medium text-[#ede7db] transition-colors duration-200 hover:bg-[#9c4a3c]"
                 >
                   Logout
                 </button>
+
               </div>
+
             </motion.div>
+
           </>
         )}
+
       </AnimatePresence>
 
     </main>

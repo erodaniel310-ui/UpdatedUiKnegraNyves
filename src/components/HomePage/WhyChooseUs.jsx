@@ -35,7 +35,7 @@ const features = [
 
 export default function WhyChooseUs() {
   return (
-    <section className="py-28 bg-white">
+    <section className="py-28 bg-[#f6f2ea]">
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Heading */}
@@ -47,24 +47,24 @@ export default function WhyChooseUs() {
           viewport={{ once: true }}
           className="text-center mb-20"
         >
-          <p className="uppercase tracking-[8px] text-yellow-600 text-sm">
+          <p className="uppercase tracking-[.3em] text-[#a8793f] text-[11px]">
             Why Shop With Us
           </p>
 
-          <h2 className="text-5xl font-black mt-4">
+          <h2 className="font-['Bodoni_Moda'] italic font-normal text-5xl mt-4 text-[#1c1712]">
             Luxury Shopping Experience
           </h2>
 
-          <p className="text-gray-500 mt-6 max-w-2xl mx-auto leading-8">
+          <p className="text-[#7a7062] mt-6 max-w-2xl mx-auto leading-8 text-[15px]">
             From carefully selected products to fast delivery and reliable
             customer support, every part of your shopping experience is
             designed with quality in mind.
           </p>
         </motion.div>
 
-        {/* Cards */}
+        {/* Index */}
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4">
 
           {features.map((feature, index) => {
             const Icon = feature.icon;
@@ -80,19 +80,25 @@ export default function WhyChooseUs() {
                 }}
                 viewport={{ once: true }}
                 whileHover={{
-                  y: -8,
+                  y: -6,
                 }}
-                className="group rounded-3xl border border-gray-200 bg-white p-10 hover:shadow-2xl transition-all duration-300"
+                className={`group px-8 ${
+                  index !== 0 ? "border-l border-[#d8cfba]" : ""
+                }`}
               >
-                <div className="w-16 h-16 rounded-full bg-black text-white flex items-center justify-center group-hover:bg-yellow-600 transition">
-                  <Icon size={28} />
+                <span className="font-['Bodoni_Moda'] italic text-[12px] text-[#a8793f]">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+
+                <div className="w-11 h-11 border border-[#1c1712] flex items-center justify-center my-5 group-hover:border-[#a8793f] group-hover:text-[#a8793f] transition">
+                  <Icon size={20} />
                 </div>
 
-                <h3 className="text-2xl font-bold mt-8">
+                <h3 className="text-[17px] font-medium text-[#1c1712]">
                   {feature.title}
                 </h3>
 
-                <p className="text-gray-500 leading-7 mt-4">
+                <p className="text-[#7a7062] leading-7 mt-2.5 text-[13px]">
                   {feature.description}
                 </p>
               </motion.div>

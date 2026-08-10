@@ -34,8 +34,8 @@ export default function Orders() {
   if (loading) {
     return (
       <div className="mt-24 flex justify-center">
-        <p className="text-lg font-semibold">
-          Loading orders...
+        <p className="text-[11px] tracking-[0.3em] text-[#a8793f]">
+          LOADING ORDERS
         </p>
       </div>
     );
@@ -45,26 +45,25 @@ export default function Orders() {
     return (
       <main className="mt-24 max-w-4xl mx-auto px-6">
 
-        <div className="bg-white rounded-3xl shadow-sm p-12 text-center">
+        <div className="border border-[#d8cfba] bg-white p-12 text-center">
 
-          <ShoppingBag
-            size={70}
-            className="mx-auto text-gray-300"
-          />
+          <div className="w-16 h-16 border border-[#1c1712] flex items-center justify-center mx-auto">
+            <ShoppingBag size={26} strokeWidth={1.5} />
+          </div>
 
-          <h1 className="text-4xl font-bold mt-6">
+          <h1 className="font-['Bodoni_Moda'] italic font-normal text-4xl mt-6 text-[#1c1712]">
             No Orders Yet
           </h1>
 
-          <p className="text-gray-500 mt-4">
+          <p className="text-[#7a7062] mt-4 text-[15px]">
             You haven't placed any orders yet.
           </p>
 
           <Link
             to="/shop"
-            className="inline-block mt-8 bg-black text-white px-8 py-4 rounded-full hover:bg-[#D4AF37] transition"
+            className="inline-block mt-8 bg-[#1c1712] text-[#ede7db] px-8 py-4 text-[12px] tracking-[0.1em] hover:bg-[#a8793f] transition"
           >
-            Start Shopping
+            START SHOPPING
           </Link>
 
         </div>
@@ -74,7 +73,7 @@ export default function Orders() {
   }
 
   return (
-    <main className=" bg-[#fafafa] min-h-screen">
+    <main className="bg-[#f6f2ea] min-h-screen">
 
       <section className="max-w-6xl mx-auto px-6 py-16">
 
@@ -84,11 +83,11 @@ export default function Orders() {
 
           <div>
 
-            <h1 className="text-5xl font-black">
+            <h1 className="font-['Bodoni_Moda'] italic font-normal text-5xl text-[#1c1712]">
               My Orders
             </h1>
 
-            <p className="text-gray-500 mt-3">
+            <p className="text-[#7a7062] mt-3 text-[15px]">
               Track your purchases and view your complete order history.
             </p>
 
@@ -102,7 +101,7 @@ export default function Orders() {
 
             <div
               key={order.id}
-              className="bg-white rounded-3xl shadow-sm p-8"
+              className="border border-[#d8cfba] bg-white p-8"
             >
 
               {/* Order Info */}
@@ -111,11 +110,11 @@ export default function Orders() {
 
                 <div>
 
-                  <p className="text-gray-500">
-                    Order Number
+                  <p className="text-[10px] tracking-[0.15em] text-[#a8793f]">
+                    ORDER NUMBER
                   </p>
 
-                  <h2 className="font-bold break-all mt-2">
+                  <h2 className="font-medium break-all mt-2 text-[13px] text-[#1c1712]">
                     {order.id}
                   </h2>
 
@@ -123,11 +122,11 @@ export default function Orders() {
 
                 <div>
 
-                  <p className="text-gray-500">
-                    Date
+                  <p className="text-[10px] tracking-[0.15em] text-[#a8793f]">
+                    DATE
                   </p>
 
-                  <h2 className="font-medium mt-2">
+                  <h2 className="font-normal mt-2 text-[13px] text-[#1c1712]">
                     {order.createdAt?.toDate
                       ? order.createdAt.toDate().toLocaleDateString()
                       : "Just now"}
@@ -137,39 +136,39 @@ export default function Orders() {
 
                 <div>
 
-                  <p className="text-gray-500">
-                    Status
+                  <p className="text-[10px] tracking-[0.15em] text-[#a8793f]">
+                    STATUS
                   </p>
 
                   <span
-                    className={`inline-block mt-2 px-4 py-2 rounded-full text-sm font-semibold ${
+                    className={`inline-block mt-2 px-3.5 py-1.5 text-[11px] tracking-[0.05em] border ${
                       order.status === "Pending"
-                        ? "bg-yellow-100 text-yellow-700"
+                        ? "border-[#a8793f] text-[#a8793f]"
                         : order.status === "Processing"
-                        ? "bg-blue-100 text-blue-700"
+                        ? "border-[#6b7d8f] text-[#6b7d8f]"
                         : order.status === "Shipped"
-                        ? "bg-purple-100 text-purple-700"
+                        ? "border-[#8a6f8a] text-[#8a6f8a]"
                         : order.status === "Delivered"
-                        ? "bg-green-100 text-green-700"
-                        : "bg-gray-100 text-gray-700"
+                        ? "border-[#4f7a5c] text-[#4f7a5c]"
+                        : "border-[#a39a8c] text-[#7a7062]"
                     }`}
                   >
-                    {order.status}
+                    {order.status?.toUpperCase()}
                   </span>
 
                 </div>
 
                 <div>
 
-                  <p className="text-gray-500">
-                    Total
+                  <p className="text-[10px] tracking-[0.15em] text-[#a8793f]">
+                    TOTAL
                   </p>
 
-                  <h2 className="font-bold text-2xl mt-2">
+                  <h2 className="font-['Bodoni_Moda'] italic font-normal text-2xl mt-2 text-[#1c1712]">
                     ₦{order.total.toLocaleString()}
                   </h2>
 
-                  <p className="text-gray-500 text-sm mt-2">
+                  <p className="text-[#7a7062] text-[12px] mt-2">
                     {order.items.length} item
                     {order.items.length > 1 ? "s" : ""}
                   </p>
@@ -180,10 +179,10 @@ export default function Orders() {
 
               {/* Products */}
 
-              <div className="mt-10 border-t pt-8">
+              <div className="mt-10 border-t border-[#d8cfba] pt-8">
 
-                <h3 className="text-xl font-bold mb-6">
-                  Products
+                <h3 className="text-[11px] tracking-[0.15em] text-[#1c1712] mb-6">
+                  PRODUCTS
                 </h3>
 
                 <div className="space-y-6">
@@ -198,21 +197,21 @@ export default function Orders() {
                       <img
                         src={item.image}
                         alt={item.name}
-                        className="w-24 h-24 rounded-2xl object-cover border"
+                        className="w-24 h-24 object-cover border border-[#a8793f]"
                       />
 
                       <div className="flex-1">
 
-                        <h4 className="font-bold text-lg">
+                        <h4 className="font-medium text-[15px] text-[#1c1712]">
                           {item.name}
                         </h4>
 
-                        <p className="text-gray-500 mt-1">
+                        <p className="text-[#7a7062] mt-1 text-[13px]">
                           Qty: {item.quantity}
                         </p>
 
                         {(item.color || item.size) && (
-                          <p className="text-gray-500 text-sm">
+                          <p className="text-[#7a7062] text-[12px]">
 
                             {item.color && (
                               <>Color: {item.color}</>
@@ -233,11 +232,11 @@ export default function Orders() {
 
                       <div className="text-right">
 
-                        <p className="font-bold text-lg">
+                        <p className="font-medium text-[15px] text-[#1c1712]">
                           ₦{item.price.toLocaleString()}
                         </p>
 
-                        <p className="text-gray-500 text-sm">
+                        <p className="text-[#7a7062] text-[12px]">
                           × {item.quantity}
                         </p>
 
@@ -253,20 +252,20 @@ export default function Orders() {
 
               {/* Buttons */}
 
-              <div className="mt-8 border-t pt-8 flex flex-wrap gap-4 justify-end">
+              <div className="mt-8 border-t border-[#d8cfba] pt-8 flex flex-wrap gap-4 justify-end">
 
                 <Link
                   to={`/order-success/${order.id}`}
-                  className="px-7 py-3 rounded-full border hover:bg-gray-100 transition"
+                  className="px-7 py-3 border border-[#1c1712] text-[12px] tracking-[0.1em] hover:border-[#a8793f] hover:text-[#a8793f] transition"
                 >
-                  View Order
+                  VIEW ORDER
                 </Link>
 
                 <Link
                   to="/shop"
-                  className="px-7 py-3 rounded-full bg-black text-white hover:bg-[#D4AF37] transition"
+                  className="px-7 py-3 bg-[#1c1712] text-[#ede7db] text-[12px] tracking-[0.1em] hover:bg-[#a8793f] transition"
                 >
-                  Buy Again
+                  BUY AGAIN
                 </Link>
 
               </div>
@@ -283,9 +282,9 @@ export default function Orders() {
 
           <Link
             to="/shop"
-            className="inline-flex hover:bg-[#D4AF37] transition items-center justify-center px-10 py-4 rounded-full border font-semibold "
+            className="inline-flex items-center justify-center px-10 py-4 border border-[#1c1712] text-[12px] tracking-[0.1em] hover:border-[#a8793f] hover:text-[#a8793f] transition"
           >
-            Continue Shopping
+            CONTINUE SHOPPING
           </Link>
 
         </div>

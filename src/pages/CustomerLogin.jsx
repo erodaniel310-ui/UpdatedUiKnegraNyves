@@ -2,6 +2,7 @@ import { useState } from "react";
 import { login, resetPassword } from "../services/authService";
 import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function CustomerLogin() {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ export default function CustomerLogin() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -35,9 +37,36 @@ export default function CustomerLogin() {
       await login(form.email, form.password);
       toast.success("Welcome back!");
       navigate("/", { replace: true });
-    } catch (error) {
-      toast.error("Invalid email or password");
-    } finally {
+    }catch (error) {
+  console.log(error);
+  console.log(error.code);
+  console.log(error.message);
+
+  switch (error.code) {
+    case "auth/invalid-credential":
+      toast.error("Incorrect email or password.");
+      break;
+
+    case "auth/user-not-found":
+      toast.error("No account exists with this email.");
+      break;
+
+    case "auth/wrong-password":
+      toast.error("Incorrect password.");
+      break;
+
+    case "auth/invalid-email":
+      toast.error("Invalid email address.");
+      break;
+
+    case "auth/too-many-requests":
+      toast.error("Too many failed attempts. Try again later.");
+      break;
+
+    default:
+      toast.error(error.message);
+  }
+}finally {
       setLoading(false);
     }
   }
@@ -51,9 +80,13 @@ export default function CustomerLogin() {
     try {
       setLoading(true);
       await resetPassword(form.email);
-      toast.success("Password reset email has been sent. Check your inbox.");
+      toast.success(
+        "Password reset email has been sent. Check your inbox."
+      );
     } catch (error) {
-      toast.error(error.message || "Unable to reset password right now.");
+      toast.error(
+        error.message || "Unable to reset password right now."
+      );
     } finally {
       setLoading(false);
     }
@@ -65,7 +98,9 @@ export default function CustomerLogin() {
         onSubmit={handleSubmit}
         className="bg-white p-10 rounded-3xl shadow-lg w-full max-w-md space-y-6"
       >
-        <h1 className="text-3xl font-bold text-center">Customer Login</h1>
+        <h1 className="text-3xl font-bold text-center">
+        Login
+        </h1>
 
         <input
           type="email"
@@ -77,15 +112,30 @@ export default function CustomerLogin() {
           onChange={handleChange}
         />
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          required
-          className="w-full border p-4 rounded-xl outline-none focus:ring-2 focus:ring-[#D4AF37]"
-          value={form.password}
-          onChange={handleChange}
-        />
+        {/* Password Input */}
+        <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            placeholder="Password"
+            required
+            className="w-full border p-4 pr-14 rounded-xl outline-none focus:ring-2 focus:ring-[#D4AF37]"
+            value={form.password}
+            onChange={handleChange}
+          />
+
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black"
+          >
+            {showPassword ? (
+              <EyeOff size={22} />
+            ) : (
+              <Eye size={22} />
+            )}
+          </button>
+        </div>
 
         <div className="text-right">
           <button
