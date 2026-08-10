@@ -37,8 +37,8 @@ export default function InstagramGallery() {
             Follow Our Journey
           </p>
 
-          <h2 className="font-['Bodoni_Moda'] italic font-normal text-5xl mt-4 text-[#1c1712]">
-            @YourFashionBrand
+          <h2 className="font-['Bodoni_Moda'] italic font-normal text-2xl mt-4 text-[#1c1712]">
+          YourFashionBrand
           </h2>
 
           <p className="text-[#7a7062] mt-6 max-w-2xl mx-auto leading-8 text-[15px]">
